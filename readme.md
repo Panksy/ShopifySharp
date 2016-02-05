@@ -1246,3 +1246,20 @@ Second, when testing the `service.ActivateAsync` and `service.DeleteAsync` metho
 2. Copy the charge's `ConfirmationUrl` into your browser and navigate to it.
 3. Accept the charge.
 4. Release the breakpoint and finish the test.
+
+# ShopifyCmd
+
+A Console app which uses the ShopifySharp services and methods. Written for viewing and removing data left behind by unit test issues.
+
+Includes basic List, Get, Delete functions across all Services. These are implemented by reflection so if a ListAsyc, GetAsync or DeleteAsync 
+method exists then you can call them.
+
+Examples:
+
+Shopify>List Webhooks
+
+Shopify>Get Customer 12345
+
+Shopify>Delete Webhook 12345
+
+
