@@ -4,28 +4,23 @@ ShopifySharp is a .NET library that enables you to authenticate and make API cal
 building custom Shopify Apps using C# and .NET. You can quickly and easily get up and running with Shopify 
 using this library.
 
-# The Shopify Development Handbook
+This is a fork of https://github.com/nozzlegear/ShopifySharp mostly for trying out things to propose to the core
 
-[![Learn how to build rock-solid Shopify apps with C# and ASP.NET](https://i.imgur.com/9GgDjK0.png)](https://nozzlegear.com/shopify-development-handbook?ref=ShopifySharp)
+# ShopifyCmd - Run ShopifySharp Services from the commandline
 
-Building an app or integration for the Shopify store is hard work. There are a ton of things you need to keep in mind when stitching together all of the API calls, redirect URLs and app settings that you'll need to use.
+A Console app which uses the ShopifySharp services and methods. Written for viewing and removing data left behind by unit test issues.
 
-You're going to be asking yourself all of these questions when you try to build an app for the Shopify store:
+Includes basic List, Get, Delete functions across all Services. These are implemented by reflection so if a ListAsyc, GetAsync or DeleteAsync 
+method exists then you can call them.
 
-- How can I charge my users when they use my app?
-- What in the world is an embedded app?
-- How should I be using Shopify's redirect URLs?
-- When should I be using a proxy page?
-- Am I dealing with webhooks the right way?
-- How can I let my user's actual customers interact with the app?
-- Can I add custom scripts to their website, and what can those scripts even do?
-- How the heck do I go about testing my app?
+Examples:
 
-It's difficult to find blog posts or tutorials about building Shopify apps, and downright impossible if you're trying to build them with C# and ASP.NET. Shopify's own partner blog puts a huge focus on designing themes over building real, functional apps, and their API docs only go so far if you don't know what you're looking for.
+Shopify>List Webhooks
 
-[The Shopify Development Handbook](https://nozzlegear.com/shopify-development-handbook?ref=ShopifySharp) is a premium educational course that distills the experience of building Shopify applications and integrations into one concise and comprehensive course.
+Shopify>Get Customer 12345
 
-[Click here to learn more about The Shopify Development Handbook, **and get a FREE sample chapter** on integrating a merchant's Shopify store with your app.](https://nozzlegear.com/shopify-development-handbook?ref=ShopifySharp)
+Shopify>Delete Webhook 12345
+
 
 # Installation
 
@@ -1246,20 +1241,5 @@ Second, when testing the `service.ActivateAsync` and `service.DeleteAsync` metho
 2. Copy the charge's `ConfirmationUrl` into your browser and navigate to it.
 3. Accept the charge.
 4. Release the breakpoint and finish the test.
-
-# ShopifyCmd
-
-A Console app which uses the ShopifySharp services and methods. Written for viewing and removing data left behind by unit test issues.
-
-Includes basic List, Get, Delete functions across all Services. These are implemented by reflection so if a ListAsyc, GetAsync or DeleteAsync 
-method exists then you can call them.
-
-Examples:
-
-Shopify>List Webhooks
-
-Shopify>Get Customer 12345
-
-Shopify>Delete Webhook 12345
 
 
