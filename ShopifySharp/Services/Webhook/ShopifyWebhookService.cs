@@ -1,7 +1,7 @@
-﻿using Humanizer;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using RestSharp;
 using ShopifySharp.Enums;
+using ShopifySharp.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,14 +51,14 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's webhooks.
         /// </summary>
-        /// <param name="options">Options for filtering the list.</param>
+        /// <param name="filter">Options for filtering the list.</param>
         /// <returns>The list of webhooks matching the filter.</returns>
-        public async Task<IEnumerable<ShopifyWebhook>> ListAsync(ShopifyWebhookFilterOptions options = null)
+        public async Task<IEnumerable<ShopifyWebhook>> ListAsync(ShopifyWebhookFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("webhooks.json", Method.GET, "webhooks");
 
             //Add optional parameters to request
-            if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
+            if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
 
             return await RequestEngine.ExecuteRequestAsync<List<ShopifyWebhook>>(_RestClient, req);
         }
@@ -71,7 +71,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="ShopifyWebhook"/>.</returns>
         public async Task<ShopifyWebhook> GetAsync(long webhookId, string fields = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("webhooks/{0}.json".FormatWith(webhookId), Method.GET, "webhook");
+            IRestRequest req = RequestEngine.CreateRequest($"webhooks/{webhookId}.json", Method.GET, "webhook");
 
             if (string.IsNullOrEmpty(fields) == false)
             {
@@ -103,7 +103,7 @@ namespace ShopifySharp
         /// <returns>The updated <see cref="ShopifyWebhook"/>.</returns>
         public async Task<ShopifyWebhook> UpdateAsync(ShopifyWebhook webhook)
         {
-            IRestRequest req = RequestEngine.CreateRequest("webhooks/{0}.json".FormatWith(webhook.Id.Value), Method.PUT, "webhook");
+            IRestRequest req = RequestEngine.CreateRequest($"webhooks/{webhook.Id.Value}.json", Method.PUT, "webhook");
 
             req.AddJsonBody(new { webhook });
 
@@ -116,7 +116,7 @@ namespace ShopifySharp
         /// <param name="webhookId">The order object's Id.</param>
         public async Task DeleteAsync(long webhookId)
         {
-            IRestRequest req = RequestEngine.CreateRequest("webhooks/{0}.json".FormatWith(webhookId), Method.DELETE);
+            IRestRequest req = RequestEngine.CreateRequest($"webhooks/{webhookId}.json", Method.DELETE);
 
             await RequestEngine.ExecuteRequestAsync(_RestClient, req);
         }

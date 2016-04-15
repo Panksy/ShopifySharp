@@ -1,6 +1,6 @@
-﻿using Humanizer;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using RestSharp;
+using ShopifySharp.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,12 +44,12 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's customers.
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<ShopifyCustomer>> ListAsync(ShopifyListOptions options = null)
+        public async Task<IEnumerable<ShopifyCustomer>> ListAsync(ShopifyListFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("customers.json", Method.GET, "customers");
 
             //Add optional parameters to request
-            if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
+            if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
 
             return await RequestEngine.ExecuteRequestAsync<List<ShopifyCustomer>>(_RestClient, req);
         }
@@ -62,7 +62,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="ShopifyCustomer"/>.</returns>
         public async Task<ShopifyCustomer> GetAsync(long customerId, string fields = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("customers/{0}.json".FormatWith(customerId), Method.GET, "customer");
+            IRestRequest req = RequestEngine.CreateRequest($"customers/{customerId}.json", Method.GET, "customer");
 
             if(string.IsNullOrEmpty(fields) == false)
             {
@@ -77,15 +77,15 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="query">The search query, in format of 'Bob country:United States', which would search for customers in the United States with a name like 'Bob'.</param>
         /// <param name="order">An optional string to order the results, in format of 'field_name DESC'. Default is 'last_order_date DESC'.</param>
-        /// <param name="options">Options for filtering the results.</param>
+        /// <param name="filter">Options for filtering the results.</param>
         /// <returns>A list of matching customers.</returns>
-        public async Task<IEnumerable<ShopifyCustomer>> SearchAsync(string query, string order = null, ShopifyFilterOptions options = null)
+        public async Task<IEnumerable<ShopifyCustomer>> SearchAsync(string query, string order = null, ShopifyListFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("customers/search.json", Method.GET, "customers");
             req.AddQueryParameter("query", query);
 
             if (string.IsNullOrEmpty(order) == false) req.AddQueryParameter("order", order);
-            if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.QueryString));
+            if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.QueryString));
 
             return await RequestEngine.ExecuteRequestAsync<List<ShopifyCustomer>>(_RestClient, req);
         }
@@ -118,7 +118,7 @@ namespace ShopifySharp
         /// <returns>The updated <see cref="ShopifyCustomer"/>.</returns>
         public async Task<ShopifyCustomer> UpdateAsync(ShopifyCustomer customer)
         {
-            IRestRequest req = RequestEngine.CreateRequest("customers/{0}.json".FormatWith(customer.Id.Value), Method.PUT, "customer");
+            IRestRequest req = RequestEngine.CreateRequest($"customers/{customer.Id.Value}.json", Method.PUT, "customer");
 
             req.AddJsonBody(new { customer });
 
@@ -131,7 +131,7 @@ namespace ShopifySharp
         /// <param name="customerId">The customer object's Id.</param>
         public async Task DeleteAsync(long customerId)
         {
-            IRestRequest req = RequestEngine.CreateRequest("customers/{0}.json".FormatWith(customerId), Method.DELETE);
+            IRestRequest req = RequestEngine.CreateRequest($"customers/{customerId}.json", Method.DELETE);
 
             await RequestEngine.ExecuteRequestAsync(_RestClient, req);
         }

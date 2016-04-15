@@ -1,6 +1,6 @@
-﻿using Humanizer;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using RestSharp;
+using ShopifySharp.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,12 +50,12 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's <see cref="ShopifyScriptTag"/>s.
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<ShopifyScriptTag>> ListAsync(ShopifyScriptTagListOptions options = null)
+        public async Task<IEnumerable<ShopifyScriptTag>> ListAsync(ShopifyScriptTagFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("script_tags.json", Method.GET, "script_tags");
 
             //Add optional parameters to request
-            if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
+            if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
 
             return await RequestEngine.ExecuteRequestAsync<List<ShopifyScriptTag>>(_RestClient, req);
         }
@@ -68,7 +68,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="ShopifyScriptTag"/>.</returns>
         public async Task<ShopifyScriptTag> GetAsync(long tagId, string fields = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("script_tags/{0}.json".FormatWith(tagId), Method.GET, "script_tag");
+            IRestRequest req = RequestEngine.CreateRequest($"script_tags/{tagId}.json", Method.GET, "script_tag");
 
             if (string.IsNullOrEmpty(fields) == false)
             {
@@ -105,7 +105,7 @@ namespace ShopifySharp
         /// <returns>The updated <see cref="ShopifyScriptTag"/>.</returns>
         public async Task<ShopifyScriptTag> UpdateAsync(ShopifyScriptTag tag)
         {
-            IRestRequest req = RequestEngine.CreateRequest("script_tags/{0}.json".FormatWith(tag.Id.Value), Method.PUT, "script_tag");
+            IRestRequest req = RequestEngine.CreateRequest($"script_tags/{tag.Id.Value}.json", Method.PUT, "script_tag");
 
             req.AddJsonBody(new { script_tag = tag });
 
@@ -118,7 +118,7 @@ namespace ShopifySharp
         /// <param name="tagId">The tag's Id.</param>
         public async Task DeleteAsync(long tagId)
         {
-            IRestRequest req = RequestEngine.CreateRequest("script_tags/{0}.json".FormatWith(tagId), Method.DELETE);
+            IRestRequest req = RequestEngine.CreateRequest($"script_tags/{tagId}.json", Method.DELETE);
 
             await RequestEngine.ExecuteRequestAsync(_RestClient, req);
         }

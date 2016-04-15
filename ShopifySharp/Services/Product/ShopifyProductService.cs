@@ -1,6 +1,6 @@
-﻿using Humanizer;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using RestSharp;
+using ShopifySharp.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,12 +31,12 @@ namespace ShopifySharp
         /// Gets a count of all of the shop's products.
         /// </summary>
         /// <returns>The count of all products for the shop.</returns>
-        public async Task<int> CountAsync(ShopifyProductFilterOptions options = null)
+        public async Task<int> CountAsync(ShopifyProductFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("products/count.json", Method.GET);
 
             //Add optional parameters to request
-            if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
+            if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
 
             JToken responseObject = await RequestEngine.ExecuteRequestAsync(_RestClient, req);
 
@@ -48,7 +48,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's products.
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<ShopifyProduct>> ListAsync(ShopifyProductFilterOptions options = null)
+        public async Task<IEnumerable<ShopifyProduct>> ListAsync(ShopifyProductFilter options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("products.json", Method.GET, "products");
 
@@ -66,7 +66,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="ShopifyProduct"/>.</returns>
         public async Task<ShopifyProduct> GetAsync(long productId, string fields = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("products/{0}.json".FormatWith(productId), Method.GET, "product");
+            IRestRequest req = RequestEngine.CreateRequest($"products/{productId}.json", Method.GET, "product");
 
             if (string.IsNullOrEmpty(fields) == false)
             {
@@ -86,13 +86,21 @@ namespace ShopifySharp
         {
             IRestRequest req = RequestEngine.CreateRequest("products.json", Method.POST, "product");
 
-            //Build the request body
-            Dictionary<string, object> body = new Dictionary<string, object>(options?.ToDictionary() ?? new Dictionary<string, object>())
-            {
-                { "product", product }
-            };
+            //Build the request body as a dictionary. Necessary because the create options must be added to the 
+            //'product' property.
+            var productBody = product.ToDictionary();
 
-            req.AddJsonBody(body);
+            if(options != null)
+            {
+                foreach(var kvp in options.ToDictionary())
+                {
+                    productBody.Add(kvp);
+                }
+            }
+
+            var requestBody = new { product = productBody };
+
+            req.AddJsonBody(requestBody);
 
             return await RequestEngine.ExecuteRequestAsync<ShopifyProduct>(_RestClient, req);
         }
@@ -104,7 +112,7 @@ namespace ShopifySharp
         /// <returns>The updated <see cref="ShopifyProduct"/>.</returns>
         public async Task<ShopifyProduct> UpdateAsync(ShopifyProduct product)
         {
-            IRestRequest req = RequestEngine.CreateRequest("products/{0}.json".FormatWith(product.Id.Value), Method.PUT, "product");
+            IRestRequest req = RequestEngine.CreateRequest($"products/{product.Id.Value}.json", Method.PUT, "product");
 
             req.AddJsonBody(new { product });
 
@@ -117,9 +125,51 @@ namespace ShopifySharp
         /// <param name="productId">The product object's Id.</param>
         public async Task DeleteAsync(long productId)
         {
-            IRestRequest req = RequestEngine.CreateRequest("products/{0}.json".FormatWith(productId), Method.DELETE);
+            IRestRequest req = RequestEngine.CreateRequest($"products/{productId}.json", Method.DELETE);
 
             await RequestEngine.ExecuteRequestAsync(_RestClient, req);
+        }
+
+        /// <summary>
+        /// Publishes an unpublished <see cref="ShopifyProduct"/>.
+        /// </summary>
+        /// <param name="id">The product's id.</param>
+        /// <returns>The published <see cref="ShopifyProduct"/></returns>
+        public async Task<ShopifyProduct> PublishAsync(long id)
+        {
+            IRestRequest req = RequestEngine.CreateRequest($"products/{id}.json", Method.PUT, "product");
+
+            req.AddJsonBody(new
+            {
+                product = new
+                {
+                    id = id,
+                    published = true
+                }
+            });
+
+            return await RequestEngine.ExecuteRequestAsync<ShopifyProduct>(_RestClient, req);
+        }
+
+        /// <summary>
+        /// Unpublishes an published <see cref="ShopifyProduct"/>.
+        /// </summary>
+        /// <param name="id">The product's id.</param>
+        /// <returns>The unpublished <see cref="ShopifyProduct"/></returns>
+        public async Task<ShopifyProduct> UnpublishAsync(long id)
+        {
+            IRestRequest req = RequestEngine.CreateRequest($"products/{id}.json", Method.PUT, "product");
+
+            req.AddJsonBody(new
+            {
+                product = new
+                {
+                    id = id,
+                    published = false
+                }
+            });
+
+            return await RequestEngine.ExecuteRequestAsync<ShopifyProduct>(_RestClient, req);
         }
 
         #endregion

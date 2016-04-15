@@ -35,10 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Humanizer, Version=1.37.7.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Humanizer.1.37.7\lib\portable-win+net40+sl50+wp8+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Humanizer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Machine.Specifications, Version=0.9.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Machine.Specifications.0.9.3\lib\net45\Machine.Specifications.dll</HintPath>
       <Private>True</Private>
@@ -55,8 +51,10 @@
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="System" />
     <Reference Include="System.configuration" />
+    <Reference Include="System.Web.Extensions" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -82,7 +80,9 @@
     <Compile Include="ShopifyAssetService Tests\When_retrieving_an_asset.cs" />
     <Compile Include="ShopifyAssetService Tests\When_updating_an_asset.cs" />
     <Compile Include="ShopifyAuthorizationService Tests\When_authenticating_a_proxy_page_request.cs" />
+    <Compile Include="ShopifyAuthorizationService Tests\When_authenticating_a_request.cs" />
     <Compile Include="ShopifyAuthorizationService Tests\When_building_an_authorization_url.cs" />
+    <Compile Include="ShopifyAuthorizationService Tests\When_checking_if_a_shopify_url_is_valid.cs" />
     <Compile Include="ShopifyChargeService Tests\When_activating_a_charge.cs" />
     <Compile Include="ShopifyChargeService Tests\When_creating_a_charge.cs" />
     <Compile Include="ShopifyChargeService Tests\When_listing_charges.cs" />
@@ -94,6 +94,17 @@
     <Compile Include="ShopifyCollectService Tests\When_getting_a_collect.cs" />
     <Compile Include="ShopifyCollectService Tests\When_listing_collects.cs" />
     <Compile Include="ShopifyCollectService Tests\When_listing_collects_with_a_filter.cs" />
+    <Compile Include="ShopifyCustomCollectionService Tests\Utils.cs" />
+    <Compile Include="ShopifyCustomCollectionService Tests\When_counting_custom_collections.cs" />
+    <Compile Include="ShopifyCustomCollectionService Tests\When_creating_a_custom_collection.cs" />
+    <Compile Include="ShopifyCustomCollectionService Tests\When_deleting_custom_collections.cs" />
+    <Compile Include="ShopifyCustomCollectionService Tests\When_listing_custom_collections.cs" />
+    <Compile Include="ShopifyCustomCollectionService Tests\When_publishing_a_custom_collection.cs" />
+    <Compile Include="ShopifyCustomCollectionService Tests\When_updating_a_custom_collection.cs" />
+    <Compile Include="ShopifyException Tests\ShopifyExceptionService.cs" />
+    <Compile Include="ShopifyException Tests\When_receiving_an_error_array.cs" />
+    <Compile Include="ShopifyException Tests\When_receiving_an_error_object.cs" />
+    <Compile Include="ShopifyException Tests\When_receiving_an_error_string.cs" />
     <Compile Include="ShopifyFulfillmentService Tests\Test_Data\FulfillmentCreation.cs" />
     <Compile Include="ShopifyFulfillmentService Tests\When_cancelling_a_fulfillment.cs" />
     <Compile Include="ShopifyFulfillmentService Tests\When_completing_a_fulfillment.cs" />
@@ -107,15 +118,35 @@
     <Compile Include="ShopifyFulfillmentService Tests\When_listing_fulfillments.cs" />
     <Compile Include="ShopifyFulfillmentService Tests\When_listing_fulfillments_with_a_filter.cs" />
     <Compile Include="ShopifyFulfillmentService Tests\When_updating_a_fulfillment.cs" />
+    <Compile Include="ShopifyMetaFieldService Tests\Test_Data\MetaFieldCreation.cs" />
+    <Compile Include="ShopifyMetaFieldService Tests\When_counting_metafields.cs" />
+    <Compile Include="ShopifyMetaFieldService Tests\When_creating_a_metafield.cs" />
+    <Compile Include="ShopifyMetaFieldService Tests\When_deleting_a_metafield.cs" />
+    <Compile Include="ShopifyMetaFieldService Tests\When_getting_a_list_of_filtered_metafields.cs" />
+    <Compile Include="ShopifyMetaFieldService Tests\When_getting_a_list_of_metafields.cs" />
+    <Compile Include="ShopifyMetaFieldService Tests\When_getting_one_metafield.cs" />
+    <Compile Include="ShopifyMetaFieldService Tests\When_updating_a_metafield.cs" />
     <Compile Include="ShopifyOrderService Tests\When_listing_orders_with_since_id.cs" />
+    <Compile Include="ShopifyPageService_Tests\Test_Data\PageCreation.cs" />
+    <Compile Include="ShopifyPageService_Tests\When_counting_pages.cs" />
+    <Compile Include="ShopifyPageService_Tests\When_creating_a_page.cs" />
+    <Compile Include="ShopifyPageService_Tests\When_updating_a_page_add_metafields.cs" />
+    <Compile Include="ShopifyPageService_Tests\When_updating_a_page_metafields.cs" />
+    <Compile Include="ShopifyPageService_Tests\When_deleting_a_page.cs" />
+    <Compile Include="ShopifyPageService_Tests\When_getting_a_list_of_pages.cs" />
+    <Compile Include="ShopifyPageService_Tests\When_getting_one_page.cs" />
+    <Compile Include="ShopifyPageService_Tests\When_creating_a_page_with_metafields.cs" />
+    <Compile Include="ShopifyPageService_Tests\When_updating_a_page.cs" />
     <Compile Include="ShopifyProductService Tests\Test_Data\ProductCreation.cs" />
-    <Compile Include="ShopifyProductService Tests\When_deleting_a_product.cs" />
-    <Compile Include="ShopifyProductService Tests\When_getting_a_list_of_products - Copy.cs" />
-    <Compile Include="ShopifyProductService Tests\When_getting_a_list_of_products.cs" />
     <Compile Include="ShopifyProductService Tests\When_counting_products.cs" />
-    <Compile Include="ShopifyProductService Tests\When_updating_a_product.cs" />
-    <Compile Include="ShopifyProductService Tests\When_getting_one_product.cs" />
+    <Compile Include="ShopifyProductService Tests\When_creating_an_unpublished_product.cs" />
     <Compile Include="ShopifyProductService Tests\When_creating_a_product.cs" />
+    <Compile Include="ShopifyProductService Tests\When_deleting_a_product.cs" />
+    <Compile Include="ShopifyProductService Tests\When_getting_a_list_of_products.cs" />
+    <Compile Include="ShopifyProductService Tests\When_getting_one_product.cs" />
+    <Compile Include="ShopifyProductService Tests\When_publishing_a_product.cs" />
+    <Compile Include="ShopifyProductService Tests\When_unpublishing_a_product.cs" />
+    <Compile Include="ShopifyProductService Tests\When_updating_a_product.cs" />
     <Compile Include="ShopifyRecurringChargeService Tests\When_activating_a_recurring_charge.cs" />
     <Compile Include="ShopifyRecurringChargeService Tests\When_creating_a_recurring_charge.cs" />
     <Compile Include="ShopifyRecurringChargeService Tests\When_deleting_a_recurring_charge.cs" />
@@ -157,6 +188,7 @@
     <Compile Include="ShopifyScriptTagService Tests\When_getting_a_script_tag.cs" />
     <Compile Include="ShopifyScriptTagService Tests\When_listing_script_tags.cs" />
     <Compile Include="ShopifyScriptTagService Tests\When_updating_a_script_tag.cs" />
+    <Compile Include="ShopifyShopService Tests\When_uninstalling_an_app.cs" />
     <Compile Include="ShopifyThemeService Tests\Test_Data\ThemeCreation.cs" />
     <Compile Include="ShopifyThemeService Tests\When_creating_a_theme.cs" />
     <Compile Include="ShopifyThemeService Tests\When_deleting_a_theme.cs" />
@@ -183,8 +215,6 @@
     <Compile Include="ShopifyWebhookService Tests\When_listing_webhooks.cs" />
     <Compile Include="ShopifyWebhookService Tests\When_listing_webhooks_with_a_filter.cs" />
     <Compile Include="ShopifyWebhookService Tests\When_updating_a_webhook.cs" />
-    <Compile Include="UnknownEnumConverter Tests\TestObject.cs" />
-    <Compile Include="UnknownEnumConverter Tests\When_using_unknownenumconverter.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="ShopifyShopService Tests\When_getting_a_shop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -205,7 +235,9 @@
     <None Include="Playlists\Customers.playlist" />
     <None Include="Playlists\FalseToNullConverter.playlist" />
     <None Include="Playlists\Fulfillments.playlist" />
+    <None Include="Playlists\MetaField.playlist" />
     <None Include="Playlists\Orders.playlist" />
+    <None Include="Playlists\Pages.playlist" />
     <None Include="Playlists\Products.playlist" />
     <None Include="Playlists\RecurringCharges.playlist" />
     <None Include="Playlists\Redirects.playlist" />
@@ -220,7 +252,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="NewFolder1\" />
     <Folder Include="ShopifyShopService Tests\Test_Data\" />
   </ItemGroup>
   <Choose>
