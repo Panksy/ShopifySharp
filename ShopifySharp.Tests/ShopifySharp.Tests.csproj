@@ -89,6 +89,7 @@
     <Compile Include="ShopifyAuthorizationService Tests\When_authenticating_a_proxy_page_request.cs" />
     <Compile Include="ShopifyAuthorizationService Tests\When_authenticating_a_request.cs" />
     <Compile Include="ShopifyAuthorizationService Tests\When_building_an_authorization_url.cs" />
+    <Compile Include="ShopifyAuthorizationService Tests\When_building_an_authorization_url_with_random_state_param.cs" />
     <Compile Include="ShopifyAuthorizationService Tests\When_checking_if_a_shopify_url_is_valid.cs" />
     <Compile Include="ShopifyChargeService Tests\When_activating_a_charge.cs" />
     <Compile Include="ShopifyChargeService Tests\When_creating_a_charge.cs" />
@@ -144,6 +145,13 @@
     <Compile Include="ShopifyPageService_Tests\When_getting_one_page.cs" />
     <Compile Include="ShopifyPageService_Tests\When_creating_a_page_with_metafields.cs" />
     <Compile Include="ShopifyPageService_Tests\When_updating_a_page.cs" />
+    <Compile Include="ShopifyProductImageService Tests\Test_Data\ProductImageTests.cs" />
+    <Compile Include="ShopifyProductImageService Tests\When_counting_product_images.cs" />
+    <Compile Include="ShopifyProductImageService Tests\When_getting_a_product_image.cs" />
+    <Compile Include="ShopifyProductImageService Tests\When_listing_product_images.cs" />
+    <Compile Include="ShopifyProductImageService Tests\When_updating_product_images.cs" />
+    <Compile Include="ShopifyProductImageService Tests\When_creating_a_product_image.cs" />
+    <Compile Include="ShopifyProductImageService Tests\When_deleting_a_product_image.cs" />
     <Compile Include="ShopifyProductService Tests\Test_Data\ProductCreation.cs" />
     <Compile Include="ShopifyProductService Tests\When_counting_products.cs" />
     <Compile Include="ShopifyProductService Tests\When_creating_an_unpublished_product.cs" />
