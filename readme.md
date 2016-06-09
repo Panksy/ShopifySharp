@@ -1,5 +1,8 @@
 # ShopifySharp: A .NET library for Shopify.
 
+[![NuGet](https://img.shields.io/nuget/v/ShopifySharp.svg?maxAge=3600)](https://www.nuget.org/packages/ShopifySharp/)
+[![license](https://img.shields.io/github/license/nozzlegear/shopifysharp.svg?maxAge=3600)](https://github.com/nozzlegear/shopifysharp/blob/master/LICENSE)
+
 ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify. It's great for
 building custom Shopify Apps using C# and .NET. You can quickly and easily get up and running with Shopify
 using this library.
@@ -171,7 +174,7 @@ string accessToken = await ShopifyAuthorizationService.Authorize(code, myShopify
 
 ### Determine if a request is authentic
 
-Any (non-webhook, non-proxy-page) request coming from Shopify will have a querystring paramater called 'signature' that you can use
+Any (non-webhook, non-proxy-page) request coming from Shopify will have a querystring paramater called 'hmac' that you can use
 to verify that the request is authentic. This signature is a hash of all querystring parameters and your app's
 secret key.
 
@@ -192,7 +195,7 @@ else
 
 ### Determine if a proxy page request is authentic
 
-Nearly identical to authenticating normal requests, a proxy page request only differs in that the algorithm uses HMACSHA256 rather than MD5. All proxy page requests coming from Shopify will have a querystring parameter named `signature` that you can use to verify the request. This signature is a hash of all querystring parameters and your app's secret key.
+Nearly identical to authenticating normal requests, a proxy page request only differs in the way the HMAC is generated. All proxy page requests coming from Shopify will have a querystring parameter named `hmac` that you can use to verify the request. This signature is a hash of all querystring parameters and your app's secret key.
 
 ```cs
 var qs = Request.QueryString;
