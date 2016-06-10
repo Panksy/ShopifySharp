@@ -120,6 +120,23 @@ namespace ShopifySharp
         }
 
         /// <summary>
+        /// Updates the given <see cref="ShopifyProduct"/>. Id must not be null.
+        /// </summary>
+        /// <param name="productId">The Id of the Product to update</param>
+        /// <param name="product">The dynamic to update.</param>
+        /// <returns>The updated <see cref="ShopifyProduct"/>.</returns>
+        public async Task<ShopifyProduct> UpdateDynamicsAsync(long productId, dynamic product)
+        {
+            //TODO verify valid dynamic - should be compatible with real ShopifyProduct object
+
+            IRestRequest req = RequestEngine.CreateRequest($"products/{productId}.json", Method.PUT, "product");
+
+            req.AddJsonBody(new { product });
+
+            return await RequestEngine.ExecuteRequestAsync<ShopifyProduct>(_RestClient, req);
+        }
+
+        /// <summary>
         /// Deletes a product with the given Id.
         /// </summary>
         /// <param name="productId">The product object's Id.</param>
