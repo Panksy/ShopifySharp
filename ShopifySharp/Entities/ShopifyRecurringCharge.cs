@@ -28,6 +28,12 @@ namespace ShopifySharp
         public DateTime? BillingOn { get; set; }
 
         /// <summary>
+        /// The capped amount is the limit a customer can be charged for usage based billing.
+        /// </summary>
+        [JsonProperty("capped_amount")]
+        public double? CappedAmount { get; set; }
+
+        /// <summary>
         /// The date and time when the customer cancelled their recurring application charge. Will be null if the charge has not
         /// been cancelled.
         /// </summary>
@@ -66,10 +72,16 @@ namespace ShopifySharp
         public string ReturnUrl { get; set; }
 
         /// <summary>
-        /// The status of the charged.
+        ///  Known values are 'pending', 'accepted', 'active', 'cancelled', 'declined' and 'expired'.
         /// </summary>
         [JsonProperty("status")]
-        public ShopifyChargeStatus? Status { get; set; }
+        public string Status { get; set; }
+
+        /// <summary>
+        /// States the terms and conditions of usage based billing charges. Must be present in order to create usage charges. These are presented to the merchant when they approve the usage charges for your app.
+        /// </summary>
+        [JsonProperty("terms")]
+        public string Terms { get; set; }
 
         /// <summary>
         /// States whether or not the application charge is a test transaction.

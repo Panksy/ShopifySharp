@@ -8,6 +8,9 @@ using System.Runtime.Serialization;
 
 namespace ShopifySharp
 {
+    /// <summary>
+    /// Enum Extension Method
+    /// </summary>
     public static class EnumExtensions
     {
         /// <summary>
@@ -33,5 +36,21 @@ namespace ShopifySharp
             return name.ToLower();
         }
 
+        /// <summary>
+        /// Convert list of Enums to a comma seperated string
+        /// </summary>
+        public static string EnumListToString<T>(IEnumerable<T> enumList)
+        {
+            var list = new List<string>();
+
+            if (enumList != null && enumList.Any())
+            {
+                foreach (var enumItem in enumList)
+                {
+                    list.Add(EnumExtensions.ToSerializedString(enumItem as Enum));
+                }
+            }
+            return string.Join(",", list);
+        }
     }
 }
