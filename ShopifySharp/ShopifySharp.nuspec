@@ -10,7 +10,44 @@
     <projectUrl>https://github.com/nozzlegear/shopifysharp</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
-    <releaseNotes> 
+    <releaseNotes>
+  3.5.0
+  =====
+  - New `RequestEngine.SetExecutionPolicy`: Set a global execution policy to be used by the service for every API call. This can be used to implement a retry policy via the `RetryExecutionPolicy` and `SmartRetryExecutionPolicy`. [(#94)](https://github.com/nozzlegear/ShopifySharp/pull/94)
+  - Made all service methods virtual so they can be overridden, making e.g. unit tests easier via a proxy. [(#93)](https://github.com/nozzlegear/ShopifySharp/pull/93)
+  3.4.4
+  =====
+  - New ShopifyCustomerUpdateOptions: Update a customer's password during ShopifyCustomerService.UpdateAsync [(#92)](https://github.com/nozzlegear/shopifysharp/pull/92).
+
+  3.4.3
+  =====
+  - Bugfix: ShopifyCustomerService.CreateAsync wasn't properly serializing the CustomerCreateOptions class.
+
+  3.4.2
+  =====
+  - Bugfix: ShopifyOrderRisk.CauseCancel should be nullable [(#88)](https://github.com/nozzlegear/shopifysharp/issues/88).
+
+  3.4.1
+  =====
+  - Added the new `DisplayScope` property to ShopifyScriptTag. Known values are 'online_store', 'order_status' and 'all'. Defaults to 'all'.
+
+  3.4.0
+  =====
+  - New ShopifyArticleService: Create, get, update, list, count, and delete articles, in addition to listing authors and listing tags.
+
+  3.3.0
+  =====
+  - New ShopifyApplicationCreditService: Create, list and get Application Credits [(#84)](https://github.com/nozzlegear/ShopifySharp/issues/84).
+  - Support for "Offline Access" and "Online Access" tokens when creating an authorization URL for OAuth integration [(#83)](https://github.com/nozzlegear/ShopifySharp/issues/83).
+  - Support for canceling an order [(#85)](https://github.com/nozzlegear/ShopifySharp/issues/85).
+
+  3.2.0
+  =====
+  - New ShopifyBlogService: Create, get, update, count, list and delete a shop's blogs [(#80)](https://github.com/nozzlegear/ShopifySharp/issues/80).
+
+  3.1.1
+  =====
+  - Bugfix: ShopifyMetaFieldService.GetAsync was returning null due to bad deserialization [(#81)](https://github.com/nozzlegear/ShopifySharp/issues/81).
   3.1.0
   =====
   - New ShopifyProductVariantService: Create, get, update, count, list and delete a product's variants [(#73)](https://github.com/nozzlegear/ShopifySharp/issues/73).

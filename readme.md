@@ -72,6 +72,9 @@ With that said, this library is still pretty new. It currently suppports the fol
 - [Order Risks](#order-risks)
 - [Smart Collections](#smart-collections)
 - [Product Variants](#product-variants)
+- [Blogs](#blogs)
+- [Application Credits](#application-credits)
+- [Articles](#articles)
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
@@ -82,8 +85,6 @@ The following APIs are not yet implemented by ShopifySharp, but I'm slowly worki
 | API | Notes |
 |-----|-------|
 | [AbandonedCheckouts](https://help.shopify.com/api/reference/abandoned_checkouts) | |
-| [Articles](https://help.shopify.com/api/reference/article) | |
-| [Blogs](https://help.shopify.com/api/reference/blog) | |
 | [CarrierService](https://help.shopify.com/api/reference/carrierservice) | |
 | [Comments](https://help.shopify.com/api/reference/comment) | |
 | [Country](https://help.shopify.com/api/reference/country) | |
@@ -115,6 +116,10 @@ These generous people have contributed their own hard work and time to improving
 - [Angel Arriaga](https://github.com/damazoarriaga)
 - [Shaju Mohammed](https://github.com/shajumohamed)
 - [Jono](https://github.com/mrjono1)
+- [Tommy Holm Jakobsen](https://github.com/thj-dk)
+- [Ernesto Gutiérrez](https://github.com/ernestogutierrez)
+- [clement911](https://github.com/clement911)
+- [mchandschuh](https://github.com/mchandschuh)
 
 Thank you!
 
@@ -661,6 +666,14 @@ var service = new ShopifyOrderService(myShopifyUrl, shopAccessToken);
 await service.OpenAsync(orderId);
 ```
 
+### Cancel an order
+
+```cs
+var service = new ShopifyOrderService(myShopifyUrl, shopAccessToken);
+
+await service.CancelAsync(orderId);
+```
+
 ## Products
 
 ### Creating a product
@@ -824,7 +837,8 @@ var service = new ShopifyScriptTagService(myShopifyUrl, shopAccessToken);
 var tag = new ShopifyScriptTag()
 {
     Event = "onload",
-    Src  = "https://example.com/my-javascript-file.js"
+    Src  = "https://example.com/my-javascript-file.js",
+    DisplayScope = 'all'
 }
 
 tag = await service.CreateAsync(tag);
@@ -1816,6 +1830,217 @@ var service = new ShopifyProductVariantService(myShopifyUrl, shopAccessToken);
 
 await service.DeleteAsync(productId, variantId);
 ```
+
+## Blogs
+
+In addition to an online storefront, Shopify shops come with a built-in blogging engine, allowing a shop to have one or more blogs. **This service is for interacting with blogs themselves, not [blog posts](#articles)**.
+
+### Creating a Blogs
+
+```cs
+var service = new ShopifyBlogService(myShopifyUrl, shopAccessToken);
+var blog = await service.CreateAsync(new ShopifyBlog()
+{
+    Title = "My new blog"
+});
+```
+
+### Getting a Blog
+
+```cs
+var service = new ShopifyBlogService(myShopifyUrl, shopAccessToken);
+var blog = await service.GetAsync(blogId);
+```
+
+### Updating a Blog
+
+```cs
+var service = new ShopifyBlogService(myShopifyUrl, shopAccessToken);
+var blog = await service.GetAsync(blogId);
+
+blog.Comments = "moderate";
+blog = await service.UpdateAsync(blog);
+```
+
+### Listing Blogs
+
+```cs
+var service = new ShopifyBlogService(myShopifyUrl, shopAccessToken);
+var blogs = await service.ListAsync();
+```
+
+### Counting Blogs
+
+```cs
+var service = new ShopifyBlogService(myShopifyUrl, shopAccessToken);
+var count = await service.CountAsync();
+```
+
+### Deleting a Blog
+
+```cs
+var service = new ShopifyBlogService(myShopifyUrl, shopAccessToken);
+
+await service.DeleteAsync(blogId);
+```
+
+## Articles
+
+Articles are objects representing a blog post. Each article belongs to a [Blog](#blogs).
+
+### Creating an Article
+
+```cs
+var service = new ShopifyArticleService(myShopifyUrl, shopAccessToken);
+var article = await service.CreateAsync(blogId, new ShopifyArticle()
+{
+    Title = "My new Article title",
+    Author = "John Smith",
+    Tags = "This Post, Has Been Tagged",
+    BodyHtml = "<h1>Hello world!</h1>",
+    Image = new ShopifyArticleImage()
+    {
+        Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==\n"
+    }
+});
+```
+
+### Getting an Article
+
+```cs
+var service = new ShopifyArticleService(myShopifyUrl, shopAccessToken);
+var article = await service.GetAsync(blogId, articleId);
+```
+
+### Updating an Article
+
+```cs
+var service = new ShopifyArticleService(myShopifyUrl, shopAccessToken);
+var article = await service.GetAsync(blogId, articleId);
+
+article.Title = "My new title";
+article = await service.UpdateAsync(blogId, articleId);
+```
+
+### Listing Articles
+
+```cs
+var service = new ShopifyArticleService(myShopifyUrl, shopAccessToken);
+var articles = await service.ListAsync(blogId);
+```
+
+### Counting Articles
+
+```cs
+var service = new ShopifyArticleService(myShopifyUrl, shopAccessToken);
+var count = await service.CountAsync(blogId);
+```
+
+### Deleting an Article
+
+```cs
+var service = new ShopifyArticleService(myShopifyUrl, shopAccessToken);
+
+await service.DeleteAsync(blogId, articleId);
+```
+
+### Listing all Article authors
+
+```cs
+var service = new ShopifyArticleService(myShopifyUrl, shopAccessToken);
+IEnumerable<string> authors = await service.ListAuthorsAsync();
+```
+
+### Listing all Article tags
+
+```cs
+var service = new ShopifyArticleService(myShopifyUrl, shopAccessToken);
+IEnumerable<string> tags = await service.ListTagsAsync();
+```
+
+### Listing all Article tags for a single Blog
+
+```cs
+var service = new ShopifyArticleService(myShopifyUrl, shopAccessToken);
+IEnumerable<string> tags = await service.ListTagsForBlogAsync(blogId);
+```
+
+## Application Credits
+
+Shopify's Application Credit API lets you offer credits for payments your app customers have made via the Application Charge, Recurring Application Charge, and Usage Charge APIs.
+
+The total amount of all Application Credits created by an application must not exceed:
+
+1. Total amount paid to the application by the shop owner in the last 30 days.
+2. Total amount of pending receivables in the partner account associated with the application.
+
+Additionally, Application Credits cannot be used by private applications.
+
+### Creating an Application Credit
+
+```cs
+var service = new ShopifyApplicationCreditService(myShopifyUrl, shopAccessToken);
+var credit = await service.CreateAsync(new ShopifyApplicationCredit() 
+{
+    Description = "Refund for Foo",
+    Amount = 10.00m
+});
+```
+
+### Getting an Application Credit
+
+```cs
+var service = new ShopifyApplicationCreditService(myShopifyUrl, shopAccessToken);
+var charge = await service.GetAsync(creditId);
+```
+
+### Listing Application Credits
+
+```cs
+var service = new ShopifyApplicationCreditService(myShopifyUrl, shopAccessToken);
+var charges = await service.ListAsync();
+```
+
+# Handling Shopify's API rate limit
+
+The Shopify API allows for an average of 2 API calls per second, with a burst limit of up to 40 API calls. Once you hit that 40 burst limit, Shopify will return a 429 Too Many Requests result. The limit is there to prevent you and thousands of other developers from overloading Shopify's servers by going hard in the paint with hundreds of requests every second. Unfortunately, it's pretty easy to write a `for` loop while trying to close a list of orders, and then start getting exceptions after closing the first 40.
+
+By default, ShopifySharp will **not** retry requests that get throttled by the rate limit, and instead this package will throw a `ShopifyRateLimitException` that you can catch and decide to retry:
+
+```cs
+foreach (var order in listOfOrders)
+{
+	try
+	{
+		await orderService.CloseAsync(order.Id.Value);
+	}
+	catch (ShopifyRateLimitException e)
+	{
+		//Wait for 10 seconds before trying again.
+		await Task.Delay(10000);
+		
+		//If this throws an exception again, loop will break and the exception will be thrown.
+		await orderService.CloseAsync(order.Id.Value);
+	}
+}
+```
+
+However, ShopifySharp also has a global request execution policy that you can use to implement a retry strategy. Currently there are three execution policies bundled with the library:
+
+1. `DefaultRequestExecutionPolicy`: This is the default policy, which will throw a `ShopifyRateLimitException` when the API rate limit has been reached.
+2. `RetryExecutionPolicy`: If a request throws a `ShopifyRateLimitException`, this policy will keep retrying it until it is successful. 
+3. `SmartRetryExecutionPolicy`: This policy attempts to use a leaky bucket strategy by proactively limiting the number of requests that will result in a `ShopifyRateLimitException`. For example: if 100 requests are created in parallel, only 40 should be sent immediately, and the remaining 60 requests should be throttled at 1 per 500ms.
+
+To set a global policy, call `RequestEngine.SetExecutionPolicy` once in your application. Remember, this is a *global* retry policy, so calling this more than once will replace the last policy.
+
+```cs
+RequestEngine.SetExecutionPolicy(new RetryExecutionPolicy());
+```
+
+Keep in mind that the `RetryExecutionPolicy` and the `SmartRetryExecutionPolicy` will keep retrying your requests – potentially until the end of time – until they are successful. It's up to you to ensure that such a strategy won't impact the performance of your applications.
+
+If you need a custom policy to do something more complicated or to e.g. implement request logging, you can create your own request policy that extends the `ShopifySharp.IRequestExecutionPolicy` interface. [Check here](https://github.com/nozzlegear/ShopifySharp/blob/master/ShopifySharp/Infrastructure/Policies/RetryExecutionPolicy.cs) for an example.
+
 
 # "Why don't you use enums?"
 
